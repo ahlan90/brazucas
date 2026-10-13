@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brazucas · Admin</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/game/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@400;900&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/arena.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="brand"><h1 id="logoSlot">Brazucas</h1><p>Área do admin</p></div>
+    <div class="hero-side"><a class="gbtn" href="index.html">Ver o site</a></div>
+  </div>
+</header>
+<main class="wrap adm" style="padding-block:22px 60px">
+
+  <!-- 1. Acesso -->
+  <section class="card" id="acesso">
+    <h2>Acesso ao GitHub <span class="status off" id="ghStatus">Desconectado</span></h2>
+    <p class="lead">Para publicar, este navegador precisa de um token do GitHub com permissão de escrita só neste repositório. O token fica salvo apenas aqui, neste navegador. Não use em computador compartilhado.</p>
+    <ol class="steps">
+      <li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Settings → Fine-grained tokens → Generate new token</a>.</li>
+      <li>Em <b>Repository access</b>, escolha <b>Only select repositories</b> e marque o repositório do site.</li>
+      <li>Em <b>Permissions → Repository permissions</b>, coloque <b>Contents: Read and write</b>. Nada mais.</li>
+      <li>Gere, copie o token e cole abaixo.</li>
+    </ol>
+    <form class="form" id="ghForm">
+      <label class="field" for="ghOwner">Dono (usuário ou organização)<input id="ghOwner" autocomplete="off" required placeholder="ahlan"></label>
+      <label class="field" for="ghRepo">Repositório<input id="ghRepo" autocomplete="off" required placeholder="brazucas"></label>
+      <label class="field" for="ghBranch">Branch<input id="ghBranch" autocomplete="off" value="main"></label>
+      <label class="field" for="ghToken">Token<input id="ghToken" type="password" autocomplete="off" required placeholder="github_pat_…"></label>
+    </form>
+    <div class="row"><button class="gbtn ok" type="submit" form="ghForm" id="ghSave">Salvar e testar</button><button class="gbtn warn" type="button" id="ghClear">Desconectar</button><span class="msg" id="ghMsg" role="status"></span></div>
+  </section>
+
+  <!-- 2. Semana -->
+  <section class="card" id="semana">
+    <h2>Publicar semana</h2>
+    <p class="lead">Selecione as linhas da planilha (pode incluir o cabeçalho), copie e cole abaixo. A ordem das colunas é a mesma da planilha: posição, nome, poder, classe, conquista, dungeon, fenda, torre, provação e disputa. A coluna de seta (↑2, ↓1, N) é opcional.</p>
+    <div class="form">
+      <label class="field" for="wkDate">Data da semana<input id="wkDate" type="date" required></label>
+      <div class="row" style="margin:0"><button class="gbtn" type="button" id="wkFromLast">Começar pela última semana</button></div>
+    </div>
+    <label class="field" for="wkPaste" style="margin-top:12px">Dados colados da planilha<textarea id="wkPaste" spellcheck="false" placeholder="1	Torr	477	Pistolas	10.245	29	1331	1181	2810	193"></textarea><small>Números podem vir no formato brasileiro (10.245 ou 66,15).</small></label>
+    <div class="row"><button class="gbtn" type="button" id="wkParse">Conferir dados</button><span class="msg" id="wkParseMsg" role="status"></span></div>
+    <div id="wkPreview"></div>
+    <div class="row"><button class="gbtn ok" type="button" id="wkPublish" disabled>Publicar semana</button><span class="msg" id="wkMsg" role="status"></span></div>
+  </section>
+
+  <!-- 3. Fotos -->
+  <section class="card" id="fotos">
+    <h2>Fotos dos personagens</h2>
+    <p class="lead">Clique num membro e escolha a imagem. Ela é cortada em quadrado e substitui a foto atual. Dica: tire um print do personagem no jogo. Também dá para trocar a foto pelo ícone de câmera no próprio site, quando este navegador está conectado.</p>
+    <div class="photo-grid" id="photoGrid"></div>
+  </section>
+</main>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/github.js"></script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const {M, KEYS, CLASSES, esc, icon, fmt} = BZ;
+  $('logoSlot').innerHTML = BZ.logoSVG(260);
+
+  /* ---------- Acesso ---------- */
+  function showStatus(){
+    const ok = BZGH.ready(), c = BZGH.cfg() || BZGH.guessRepo();
+    $('ghStatus').className = 'status ' + (ok ? 'ok' : 'off');
+    $('ghStatus').textContent = ok ? 'Conectado a ' + c.owner + '/' + c.repo : 'Desconectado';
+    $('ghOwner').value = c.owner || ''; $('ghRepo').value = c.repo || ''; $('ghBranch').value = (c && c.branch) || 'main';
+    $('ghToken').value = ok ? c.token : '';
+    $('wkPublish').disabled = !ok || !state.rows.length || state.errors > 0;
+    renderPhotos();
+  }
+  $('ghForm').onsubmit = async e => {
+    e.preventDefault();
+    const msg = $('ghMsg'); msg.className = 'msg'; msg.textContent = 'Testando…';
+    BZGH.setCfg({ owner: $('ghOwner').value.trim(), repo: $('ghRepo').value.trim(), branch: $('ghBranch').value.trim() || 'main', token: $('ghToken').value.trim() });
+    try { await BZGH.test(); msg.className = 'msg good'; msg.textContent = 'Tudo certo: este navegador pode publicar.'; }
+    catch (err) { BZGH.clearCfg(); msg.className = 'msg err'; msg.textContent = err.message; }
+    showStatus();
+  };
+  $('ghClear').onclick = () => { BZGH.clearCfg(); $('ghMsg').className = 'msg'; $('ghMsg').textContent = 'Token apagado deste navegador.'; showStatus(); };
+
+  /* ---------- Semana: leitura da planilha ---------- */
+  const CLASS_ALIASES = { rifle: 'Rifle', staff: 'Staff', cajado: 'Staff', pistolas: 'Pistolas', pistola: 'Pistolas', db: 'DB', 'lâmina dupla': 'DB', 'lamina dupla': 'DB', '2h': '2H', 'duas mãos': '2H', 'duas maos': '2H' };
+  const NUMK = ['poder', 'conquista', 'dungeon', 'fenda', 'torre', 'provacao', 'disputa'];
+  function parseNum(s){
+    s = String(s == null ? '' : s).trim().replace(/\s|k$/gi, '');
+    if (!s || s === '-' || s === '–') return NaN;
+    if (s.indexOf(',') >= 0) s = s.replace(/\./g, '').replace(',', '.');
+    else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+    return Number(s);
+  }
+  function parseMove(s){
+    s = String(s || '').trim();
+    if (/^n/i.test(s)) return 'N';
+    const n = (s.match(/\d+/) || [])[0];
+    if (!n) return '=';
+    if (/[↑▲+]/.test(s)) return '+' + n;
+    if (/[↓▼-]/.test(s)) return '-' + n;
+    return '=';
+  }
+  function parsePaste(text){
+    const rows = [], skipped = [];
+    text.split(/\r?\n/).forEach((line, li) => {
+      if (!line.trim()) return;
+      const cells = (line.indexOf('\t') >= 0 ? line.split('\t') : line.split(/;|\s{2,}/)).map(c => c.trim());
+      const ci = cells.findIndex(c => CLASS_ALIASES[c.toLowerCase()]);
+      if (ci < 2) { skipped.push(li + 1); return; }
+      const r = { nome: cells[ci - 2], classe: CLASS_ALIASES[cells[ci].toLowerCase()] };
+      r.poder = parseNum(cells[ci - 1]);
+      ['conquista', 'dungeon', 'fenda', 'torre', 'provacao', 'disputa'].forEach((k, j) => { r[k] = parseNum(cells[ci + 1 + j]); });
+      const before = cells.slice(0, ci - 2).filter(Boolean);
+      const posCell = before.reverse().find(c => /^\d+$/.test(c));
+      r.posicao = posCell ? +posCell : null;
+      const mvCell = cells.slice(0, ci - 2).find(c => /^[↑↓▲▼+\-=–nN]/.test(c) && !/^\d+$/.test(c));
+      r.movimento = mvCell ? parseMove(mvCell) : null;
+      rows.push(r);
+    });
+    rows.forEach((r, i) => { if (r.posicao == null) r.posicao = i + 1; });
+    return { rows, skipped };
+  }
+
+  const state = { rows: [], errors: 0, last: null, lastDate: null };
+  function validate(){
+    const last = state.last ? Object.fromEntries(state.last.membros.map(m => [m.nome, m])) : {};
+    const names = {};
+    let errors = 0, warns = 0;
+    state.rows.forEach(r => {
+      r.notes = []; r.bad = {};
+      if (!r.nome) { r.notes.push('sem nome'); errors++; }
+      if (names[r.nome]) { r.notes.push('nome repetido'); errors++; }
+      names[r.nome] = 1;
+      NUMK.forEach(k => {
+        if (!Number.isFinite(r[k])) { r.bad[k] = 1; r.notes.push(k + ' vazio ou inválido'); errors++; return; }
+        if (!Number.isInteger(r[k])) { r.bad[k] = 1; r.notes.push(k + ' com casas decimais (' + fmt(r[k]) + ')'); warns++; }
+        const p = last[r.nome];
+        if (p && p[k] > 0 && r[k] < p[k] * 0.7) { r.bad[k] = 1; r.notes.push(k + ' caiu de ' + fmt(p[k]) + ' para ' + fmt(r[k])); warns++; }
+      });
+    });
+    state.errors = errors;
+    const novos = state.rows.filter(r => state.last && !last[r.nome]).map(r => r.nome);
+    const sairam = state.last ? state.last.membros.filter(m => !names[m.nome]).map(m => m.nome) : [];
+    return { errors, warns, novos, sairam };
+  }
+  function renderPreview(){
+    const box = $('wkPreview');
+    if (!state.rows.length) { box.innerHTML = ''; $('wkPublish').disabled = true; return; }
+    const v = validate();
+    const exists = BZ.DATES.indexOf($('wkDate').value) >= 0;
+    let h = '<div class="chips-sum"><span class="chip-s">' + state.rows.length + ' membros</span>' +
+      (v.novos.length ? '<span class="chip-s">Novos: ' + v.novos.map(esc).join(', ') + '</span>' : '') +
+      (v.sairam.length ? '<span class="chip-s w">Saíram: ' + v.sairam.map(esc).join(', ') + '</span>' : '') +
+      (v.warns ? '<span class="chip-s w">' + v.warns + ' aviso(s): confira as células marcadas</span>' : '') +
+      (v.errors ? '<span class="chip-s w">' + v.errors + ' erro(s): corrija antes de publicar</span>' : '') +
+      (exists ? '<span class="chip-s w">Já existe a semana ' + BZ.fmtDate($('wkDate').value) + ': publicar vai substituir</span>' : '') + '</div>';
+    h += '<div class="prev-wrap"><table class="prev-tbl"><thead><tr><th>#</th><th>Nome</th><th>Classe</th>' + NUMK.map(k => '<th>' + M.find(m => m.k === k).short + '</th>').join('') + '<th>Avisos</th></tr></thead><tbody>';
+    state.rows.forEach((r, i) => {
+      h += '<tr><td>' + r.posicao + '</td><td>' + esc(r.nome) + '</td><td><select data-i="' + i + '" data-k="classe" aria-label="Classe de ' + esc(r.nome) + '">' + Object.keys(CLASSES).map(c => '<option' + (c === r.classe ? ' selected' : '') + '>' + c + '</option>').join('') + '</select></td>' +
+        NUMK.map(k => '<td class="' + (r.bad[k] ? 'bad' : '') + '"><input data-i="' + i + '" data-k="' + k + '" value="' + (Number.isFinite(r[k]) ? String(r[k]).replace('.', ',') : '') + '" inputmode="decimal" aria-label="' + k + ' de ' + esc(r.nome) + '"></td>').join('') +
+        '<td class="note">' + r.notes.map(esc).join('; ') + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+    box.innerHTML = h;
+    box.querySelectorAll('[data-i]').forEach(inp => inp.onchange = () => {
+      const r = state.rows[+inp.dataset.i], k = inp.dataset.k;
+      r[k] = k === 'classe' ? inp.value : parseNum(inp.value);
+      renderPreview();
+    });
+    $('wkPublish').disabled = !BZGH.ready() || v.errors > 0;
+    $('wkMsg').textContent = !BZGH.ready() ? 'Conecte o GitHub acima para publicar.' : '';
+  }
+  $('wkParse').onclick = () => {
+    const { rows, skipped } = parsePaste($('wkPaste').value);
+    state.rows = rows;
+    $('wkParseMsg').className = 'msg ' + (rows.length ? 'good' : 'err');
+    $('wkParseMsg').textContent = rows.length ? rows.length + ' membros lidos' + (skipped.length ? ' (ignorei ' + skipped.length + ' linha(s) sem classe, como o cabeçalho)' : '') + '.' : 'Não encontrei nenhuma linha com classe (Rifle, Staff, Pistolas, DB ou 2H).';
+    renderPreview();
+  };
+  $('wkDate').onchange = renderPreview;
+  $('wkFromLast').onclick = () => {
+    if (!state.last) return;
+    $('wkPaste').value = state.last.membros.map(m => [m.posicao, m.nome, m.poder, m.classe, m.conquista, m.dungeon, m.fenda, m.torre, m.provacao, m.disputa].map(v => typeof v === 'number' ? String(v).replace('.', ',') : v).join('\t')).join('\n');
+    $('wkParse').click();
+  };
+  $('wkPublish').onclick = async () => {
+    const date = $('wkDate').value, msg = $('wkMsg');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { msg.className = 'msg err'; msg.textContent = 'Escolha a data da semana.'; return; }
+    const membros = state.rows.map(r => {
+      const o = { posicao: r.posicao };
+      if (r.movimento) o.movimento = r.movimento;
+      o.nome = r.nome; o.classe = r.classe;
+      NUMK.forEach(k => { o[k] = r[k]; });
+      return o;
+    });
+    $('wkPublish').disabled = true; msg.className = 'msg'; msg.textContent = 'Publicando…';
+    try {
+      await BZGH.saveWeek(date, membros);
+      msg.className = 'msg good'; msg.textContent = 'Semana ' + BZ.fmtDate(date) + ' publicada. O site atualiza para todos em cerca de 1 minuto.';
+      if (BZ.DATES.indexOf(date) < 0) { BZ.DATES.push(date); BZ.DATES.sort(); }
+    } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; }
+    $('wkPublish').disabled = false;
+  };
+
+  /* ---------- Fotos ---------- */
+  function renderPhotos(){
+    const grid = $('photoGrid');
+    if (!state.last) { grid.innerHTML = '<p class="msg">Carregando membros…</p>'; return; }
+    const list = BZ.week();
+    grid.innerHTML = [...list].sort((a, b) => a.nome.localeCompare(b.nome)).map(p =>
+      '<button type="button" class="ph" data-photo="' + esc(p.nome) + '">' + BZ.avatar(p) + '<span>' + esc(p.nome) + '</span><small>' + icon(BZ.avatarURL(p.nome) ? 'camera' : 'upload', 14) + (BZ.avatarURL(p.nome) ? 'Trocar' : 'Enviar foto') + '</small></button>').join('');
+  }
+  window.addEventListener('bz:avatar', renderPhotos);
+
+  /* ---------- Início ---------- */
+  const today = new Date(); today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+  $('wkDate').value = today.toISOString().slice(0, 10);
+  BZ.load().then(() => {
+    state.last = BZ.WEEKS[BZ.CUR];
+    $('wkFromLast').textContent = 'Começar pela semana ' + BZ.fmtDate(BZ.DATES[BZ.CUR]);
+    showStatus();
+  }).catch(e => { $('photoGrid').innerHTML = '<p class="bz-error">Não consegui carregar os dados: ' + esc(e.message) + '</p>'; });
+  showStatus();
+})();
+</script>
+</body>
+</html>

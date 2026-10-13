@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brazucas · Guilda Eternal Hero</title>
+<meta name="description" content="Hall da Fama, ranking semanal e evolução dos membros da guilda Brazucas no Eternal Hero.">
+<meta property="og:title" content="Brazucas · Guilda Eternal Hero">
+<meta property="og:description" content="Hall da Fama e ranking semanal da guilda Brazucas.">
+<meta property="og:image" content="assets/game/keyart.webp">
+<link rel="icon" href="assets/game/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@400;900&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/arena.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="brand"><h1 id="logoSlot">Brazucas</h1><p id="bz-weeklabel">Carregando…</p></div>
+    <div class="hero-side"><img class="eh" src="assets/game/eh-logo.webp" alt="Eternal Hero"><label class="bz-sr" for="bz-week">Semana</label><select class="week" id="bz-week"></select></div>
+  </div>
+</header>
+<div class="wrap">
+  <nav class="tabs" aria-label="Seções">
+    <a class="gbtn" href="#hall" data-view="hall">Hall da Fama</a>
+    <a class="gbtn" href="#ranking" data-view="ranking">Ranking</a>
+    <a class="gbtn" href="#perfil" data-view="perfil">Perfil</a>
+    <a class="gbtn" href="#guilda" data-view="guilda">Guilda</a>
+    <a class="admin-link" href="admin.html" id="adminLink"></a>
+  </nav>
+  <main>
+    <section id="view-hall"><div id="hall"></div></section>
+    <section id="view-ranking" hidden><h2 class="sec">Ranking da guilda <small>clique no cabeçalho para ordenar</small></h2><div id="ranking"></div></section>
+    <section id="view-perfil" hidden><h2 class="sec">Perfil do herói</h2><div id="perfil"></div></section>
+    <section id="view-guilda" hidden><h2 class="sec">Guilda em números</h2><div id="guilda"></div></section>
+  </main>
+  <footer class="foot"><img src="assets/game/app-icon.webp" alt=""><span>Guilda Brazucas · Eternal Hero (Rivvy Games). Fan site, sem vínculo oficial.</span></footer>
+</div>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/github.js"></script>
+<script>
+(function(){
+  const {M,leaders,climbers,fmt,fmtVal,fmtDelta,avatar,icon,esc} = BZ;
+  document.getElementById('logoSlot').innerHTML = BZ.logoSVG(290);
+  document.getElementById('adminLink').innerHTML = icon('lock', 16) + (BZGH.ready() ? 'Admin (conectado)' : 'Admin');
+  const cam = (nome, size) => BZ.canEdit() ? '<button type="button" class="cam" data-photo="' + esc(nome) + '" aria-label="Trocar foto de ' + esc(nome) + '">' + icon('camera', size || 18) + '</button>' : '';
+
+  function renderHall(el, list){
+    let h = '<h2 class="sec">Campeões da semana <small>um por modalidade</small></h2><div class="champs">';
+    M.forEach(m => {
+      const top = leaders(list, m.k, 3), p = top[0];
+      h += '<article class="hcard" data-k="' + m.k + '" style="--mc:var(--m-' + m.k + ')">' +
+        '<span class="tag">' + icon(m.icon, 16) + m.short + '</span>' +
+        '<div class="frame" data-member="' + esc(p.nome) + '"><div class="name"><span class="cls">' + icon(p.classe, 16) + '</span>' + esc(p.nome) + '</div>' +
+        '<div class="shot">' + avatar(p) + cam(p.nome) + '</div>' +
+        '<div class="val">' + fmtVal(m.k, p[m.k]) + '</div></div>' +
+        '<ol class="runners">' + top.slice(1).map((r, i) => '<li data-member="' + esc(r.nome) + '"><span class="pos">' + (i + 2) + '</span>' + avatar(r, 'bz-av-xs') + '<span>' + esc(r.nome) + '</span><b>' + fmt(r[m.k]) + '</b></li>').join('') + '</ol></article>';
+    });
+    h += '</div>';
+
+    const cl = M.map(m => ({ m, p: climbers(list, m.k)[0] })).filter(x => x.p && x.p.delta[x.m.k] > 0);
+    h += '<h2 class="sec">Os que mais subiram <small>maior evolução da semana em cada modalidade</small></h2><div class="climbs">';
+    if (!cl.length) h += '<p class="empty">Esta é a primeira semana registrada. A partir da próxima semana publicada, aqui aparece quem mais evoluiu em cada modalidade.</p>';
+    cl.forEach(({ m, p }) => {
+      h += '<div class="climb" data-member="' + esc(p.nome) + '" style="--mc:var(--m-' + m.k + ')">' + avatar(p) + cam(p.nome, 14) +
+        '<div><div class="k">' + icon(m.icon, 14) + m.short + '</div><div class="n">' + esc(p.nome) + '</div><div class="d">' + fmtDelta(m.k, p.delta[m.k]) + '</div></div></div>';
+    });
+    h += '</div>';
+
+    const t3 = leaders(list, 'poder', 3);
+    const pod = [[t3[1], 2, 110, '#d6dde8'], [t3[0], 1, 150, '#ffc928'], [t3[2], 3, 80, '#ff9a5a']].filter(x => x[0]);
+    h += '<h2 class="sec">Pódio de poder</h2><div class="panel"><div class="podium">' + pod.map(([p, n, hh, c]) =>
+      '<div class="pd" data-member="' + esc(p.nome) + '" style="--pc:' + c + '">' + avatar(p) + '<div class="n">' + esc(p.nome) + '</div><div class="bar" style="height:' + hh + 'px">' + n + 'º<small>' + fmtVal('poder', p.poder) + '</small></div></div>').join('') + '</div></div>';
+    el.innerHTML = h;
+  }
+  BZ.app({ renderHall });
+})();
+</script>
+</body>
+</html>

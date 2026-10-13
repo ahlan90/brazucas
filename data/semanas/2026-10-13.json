@@ -1,0 +1,29 @@
+{
+  "data": "2026-10-13",
+  "membros": [
+    {"posicao": 1, "movimento": "=", "nome": "Torr", "classe": "Pistolas", "poder": 477, "conquista": 10245, "dungeon": 29, "fenda": 1331, "torre": 1181, "provacao": 2810, "disputa": 193},
+    {"posicao": 2, "movimento": "=", "nome": "FreedBR", "classe": "DB", "poder": 467, "conquista": 9095, "dungeon": 16, "fenda": 966, "torre": 1037, "provacao": 2190, "disputa": 177},
+    {"posicao": 3, "movimento": "+2", "nome": "Gucci", "classe": "Rifle", "poder": 471, "conquista": 10390, "dungeon": 29, "fenda": 1501, "torre": 1193, "provacao": 3020, "disputa": 198},
+    {"posicao": 4, "movimento": "=", "nome": "LeGiON", "classe": "Staff", "poder": 463, "conquista": 10675, "dungeon": 29, "fenda": 1716, "torre": 1202, "provacao": 3270, "disputa": 196},
+    {"posicao": 5, "movimento": "+1", "nome": "Xelfs", "classe": "Rifle", "poder": 444, "conquista": 10635, "dungeon": 29, "fenda": 1823, "torre": 1184, "provacao": 3116, "disputa": 185},
+    {"posicao": 6, "movimento": "+2", "nome": "Kennedy", "classe": "Rifle", "poder": 436, "conquista": 10875, "dungeon": 29, "fenda": 1204, "torre": 1088, "provacao": 2700, "disputa": 187},
+    {"posicao": 7, "movimento": "=", "nome": "LestatDi", "classe": "Staff", "poder": 435, "conquista": 9315, "dungeon": 2, "fenda": 1358, "torre": 1042, "provacao": 2820, "disputa": 184},
+    {"posicao": 8, "movimento": "+1", "nome": "Exemplo", "classe": "Staff", "poder": 413, "conquista": 9485, "dungeon": 11, "fenda": 1317, "torre": 1030, "provacao": 2310, "disputa": 188},
+    {"posicao": 9, "movimento": "+2", "nome": "Abrobaa", "classe": "Staff", "poder": 404, "conquista": 10180, "dungeon": 22, "fenda": 1435, "torre": 1103, "provacao": 2550, "disputa": 199},
+    {"posicao": 10, "movimento": "+4", "nome": "Snip", "classe": "Rifle", "poder": 393, "conquista": 10300, "dungeon": 20, "fenda": 1089, "torre": 873, "provacao": 1950, "disputa": 202},
+    {"posicao": 11, "movimento": "-1", "nome": "Vaguinho", "classe": "Staff", "poder": 392, "conquista": 9370, "dungeon": 13, "fenda": 1311, "torre": 938, "provacao": 2420, "disputa": 66.15},
+    {"posicao": 12, "movimento": "=", "nome": "Dosinfernos", "classe": "Rifle", "poder": 389, "conquista": 9190, "dungeon": 10, "fenda": 1077, "torre": 959, "provacao": 2020, "disputa": 148},
+    {"posicao": 13, "movimento": "=", "nome": "Thorny", "classe": "Staff", "poder": 382, "conquista": 9200, "dungeon": 6, "fenda": 850, "torre": 833, "provacao": 1550, "disputa": 150},
+    {"posicao": 14, "movimento": "+1", "nome": "EroSennin", "classe": "Rifle", "poder": 373, "conquista": 9070, "dungeon": 6, "fenda": 1064, "torre": 942, "provacao": 2180, "disputa": 127},
+    {"posicao": 15, "movimento": "+1", "nome": "Fallen", "classe": "Rifle", "poder": 371, "conquista": 9555, "dungeon": 14, "fenda": 1079, "torre": 1003, "provacao": 2000, "disputa": 173},
+    {"posicao": 16, "movimento": "+2", "nome": "Rod", "classe": "Rifle", "poder": 355, "conquista": 8625, "dungeon": 3, "fenda": 1028, "torre": 851, "provacao": 2070, "disputa": 192},
+    {"posicao": 17, "movimento": "N", "nome": "Dragos", "classe": "2H", "poder": 339, "conquista": 8565, "dungeon": 9, "fenda": 257, "torre": 796, "provacao": 1370, "disputa": 0},
+    {"posicao": 18, "movimento": "+1", "nome": "TiaDaLimpeza", "classe": "Rifle", "poder": 337, "conquista": 8875, "dungeon": 11, "fenda": 940, "torre": 909, "provacao": 1650, "disputa": 134},
+    {"posicao": 19, "movimento": "-1", "nome": "MeGaDuCk", "classe": "Pistolas", "poder": 331, "conquista": 9415, "dungeon": 9, "fenda": 999, "torre": 887, "provacao": 1865, "disputa": 160},
+    {"posicao": 20, "movimento": "+1", "nome": "Crowkiller", "classe": "2H", "poder": 331, "conquista": 8520, "dungeon": 5, "fenda": 830, "torre": 803, "provacao": 1760, "disputa": 141},
+    {"posicao": 21, "movimento": "+1", "nome": "Moby", "classe": "Rifle", "poder": 294, "conquista": 9095, "dungeon": 6, "fenda": 851, "torre": 779, "provacao": 1885, "disputa": 142},
+    {"posicao": 22, "movimento": "+2", "nome": "NewHero", "classe": "Pistolas", "poder": 284, "conquista": 8560, "dungeon": 15, "fenda": 586, "torre": 719, "provacao": 1183, "disputa": 103},
+    {"posicao": 23, "movimento": "=", "nome": "Creed", "classe": "DB", "poder": 276, "conquista": 7860, "dungeon": 1, "fenda": 617, "torre": 688, "provacao": 1180, "disputa": 143},
+    {"posicao": 24, "movimento": "N", "nome": "CoyoTe", "classe": "Rifle", "poder": 81.06, "conquista": 6485, "dungeon": 0, "fenda": 96, "torre": 102, "provacao": 450, "disputa": 0}
+  ]
+}
