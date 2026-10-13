@@ -2,7 +2,7 @@
   "data": "2026-10-11",
   "membros": [
     {"nome": "LeGiON", "classe": "Pistolas", "poder": 499, "conquista": 12040, "fenda": 1878, "torre": 1268, "provacao": 3824},
-    {"nome": "Gucci", "classe": "Pistolas", "poder": 495, "conquista": 11550},
+    {"nome": "Gucci", "classe": "Pistolas", "poder": 495, "conquista": 11550, "fenda": 1828, "torre": 1269, "provacao": 3332},
     {"nome": "Torr", "classe": "Pistolas", "poder": 494, "conquista": 11500, "fenda": 1652, "torre": 1208, "provacao": 3658},
     {"nome": "FreedBR", "classe": "Rifle", "poder": 486, "conquista": 10915, "fenda": 1015, "torre": 1073, "provacao": 2190},
     {"nome": "Xelfs", "classe": "Pistolas", "poder": 459, "conquista": 12290, "fenda": 2027, "torre": 1198, "provacao": 3215},
