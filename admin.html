@@ -90,7 +90,7 @@
   $('ghClear').onclick = () => { BZGH.clearCfg(); $('ghMsg').className = 'msg'; $('ghMsg').textContent = 'Token apagado deste navegador.'; showStatus(); };
 
   /* ---------- Semana: leitura da planilha ---------- */
-  const CLASS_ALIASES = { rifle: 'Rifle', staff: 'Staff', cajado: 'Staff', pistolas: 'Pistolas', pistola: 'Pistolas', db: 'DB', 'lâmina dupla': 'DB', 'lamina dupla': 'DB', '2h': '2H', 'duas mãos': '2H', 'duas maos': '2H' };
+  const CLASS_ALIASES = { rifle: 'Rifle', staff: 'Staff', cajado: 'Staff', pistolas: 'Pistolas', pistola: 'Pistolas', db: 'DB', 'lâmina dupla': 'DB', 'lamina dupla': 'DB', glaives: 'DB', glaive: 'DB', '2h': '2H', 'duas mãos': '2H', 'duas maos': '2H', arco: 'Arco', bow: 'Arco', orb: 'Orb', orbe: 'Orb' };
   const NUMK = ['poder', 'conquista', 'dungeon', 'fenda', 'torre', 'provacao', 'disputa'];
   function parseNum(s){
     s = String(s == null ? '' : s).trim().replace(/\s|k$/gi, '');
@@ -182,7 +182,7 @@
     const { rows, skipped } = parsePaste($('wkPaste').value);
     state.rows = rows;
     $('wkParseMsg').className = 'msg ' + (rows.length ? 'good' : 'err');
-    $('wkParseMsg').textContent = rows.length ? rows.length + ' membros lidos' + (skipped.length ? ' (ignorei ' + skipped.length + ' linha(s) sem classe, como o cabeçalho)' : '') + '.' : 'Não encontrei nenhuma linha com classe (Rifle, Staff, Pistolas, DB ou 2H).';
+    $('wkParseMsg').textContent = rows.length ? rows.length + ' membros lidos' + (skipped.length ? ' (ignorei ' + skipped.length + ' linha(s) sem classe, como o cabeçalho)' : '') + '.' : 'Não encontrei nenhuma linha com classe (Rifle, Staff, Pistolas, DB, 2H, Arco ou Orb).';
     renderPreview();
   };
   $('wkDate').onchange = renderPreview;

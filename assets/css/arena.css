@@ -145,3 +145,4 @@ nav.tabs .admin-link:hover{color:var(--fg);background:var(--surface)}
 .climbs{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
 .climb>div{flex:1;min-width:0}
 .climb .d{display:inline-block;margin:5px 0 0;font-size:17px;padding:1px 10px}
+.hcard-empty .empty{grid-column:auto;margin-top:8px;padding:12px;font-size:13px;text-align:center}

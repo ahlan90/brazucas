@@ -35,7 +35,7 @@ Deploy = push na `main`; o Pages republica em ~1 min. Setup inicial do Pages est
 `load()` monta três estruturas derivadas:
 - `HIST[nome][metrica]` = array indexado por semana (null quando o membro não estava).
 - `POS[w][nome]` = posição na semana `w`. Vem do campo `posicao`; se **qualquer** membro da semana não tiver `posicao`, a semana inteira cai para ordenação por `poder`.
-- `week(w)` devolve a lista normalizada com `pos`, `prev`, `delta` e `mv`. Métrica ausente vira `0`.
+- `week(w)` devolve a lista normalizada com `pos`, `prev`, `delta` e `mv`. Métrica ausente fica `null` (= sem dado; semanas antigas só têm `poder` e `disputa`). Todo renderer precisa tolerar `null`: usar `has(list, k)` antes de somar/ordenar, `fmt`/`fmtVal` já devolvem `–`.
 
 Regra do movimento (`mv`): só a **primeira** semana usa o campo `movimento` do arquivo. Da segunda em diante é calculado comparando `POS[w-1]`. `delta` é `null` sem semana anterior, por isso "Os que mais subiram" e gráficos ficam vazios na primeira semana.
 
@@ -46,7 +46,7 @@ Regra do movimento (`mv`): só a **primeira** semana usa o campo `movimento` do 
 2. Variável `--m-<chave>` no `:root` de `arena.css` (cor da modalidade, aplicada via `--mc` inline).
 3. `NUMK` e a ordem de colunas em `parsePaste` no `admin.html`. **A ordem ali é a da planilha, não a de `M`**: `[pos?] [seta?] nome poder classe conquista dungeon fenda torre provacao disputa`. O parser localiza a coluna de classe por alias (`CLASS_ALIASES`) e lê as demais por offset relativo.
 
-Classes de personagem: `CLASSES` em `core.js` (`Rifle, Staff, Pistolas, DB, 2H`), ícones em `ICONS` com a mesma chave, aliases de parsing em `admin.html`.
+Classes de personagem: `CLASSES` em `core.js` (`Rifle, Staff, Pistolas, DB, 2H, Arco, Orb`), ícones em `ICONS` com a mesma chave, aliases de parsing em `admin.html`.
 
 ### Heurística de valor suspeito
 

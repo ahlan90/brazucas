@@ -50,7 +50,8 @@ Formato de um membro na semana:
 {"posicao":1,"movimento":"=","nome":"Torr","classe":"Pistolas","poder":477,"conquista":10245,"dungeon":29,"fenda":1331,"torre":1181,"provacao":2810,"disputa":193}
 ```
 
-- `classe`: `Rifle`, `Staff`, `Pistolas`, `DB` ou `2H`.
+- `classe`: `Rifle`, `Staff`, `Pistolas`, `DB`, `2H`, `Arco` ou `Orb`.
+- Modalidade ausente no JSON = sem dado naquela semana: o site mostra `–` e não entra nos campeões, médias ou evolução.
 - `poder` e `disputa` em milhares (K), como na planilha.
 - `posicao` vem da planilha. `movimento` (`+2`, `-1`, `N`, `=`) só é usado na primeira semana; a partir da segunda, o site calcula sozinho comparando com a semana anterior, assim como "os que mais subiram" e os gráficos de evolução.
 
@@ -65,6 +66,7 @@ python3 -m http.server 8000
 
 ## Observações
 
+- As semanas de 26/05/2026 e 02/06/2026 vieram da aba *Clã* da planilha *Eternal Hero - Wiki* (só poder, disputa e arma; as datas foram estimadas pela última edição da planilha). Não há semanas entre 02/06 e 13/10, então o movimento e a evolução de 13/10 comparam com 02/06.
 - A semana de 13/10/2026 foi transcrita da planilha. Dois valores parecem digitados em outro formato e aparecem marcados no site: Disputa do Vaguinho (66,15) e Poder do CoyoTe (81,06).
 - As 8 fotos iniciais foram recortadas da imagem de destaques da planilha. Os demais membros aparecem com o ícone da classe até alguém enviar a foto.
 - Fan site sem vínculo com a Rivvy Games. A arte do jogo foi extraída do APK v3.3.0.

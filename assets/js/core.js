@@ -16,7 +16,7 @@
   ];
   M.forEach(m => { m.short = m.short || m.l; });
   const KEYS = M.map(m => m.k);
-  const CLASSES = { Rifle: 'Rifle', Staff: 'Cajado', Pistolas: 'Pistolas', DB: 'Lâmina Dupla', '2H': 'Duas Mãos' };
+  const CLASSES = { Rifle: 'Rifle', Staff: 'Cajado', Pistolas: 'Pistolas', DB: 'Lâmina Dupla', '2H': 'Duas Mãos', Arco: 'Arco', Orb: 'Orbe' };
 
   /* ---------- Estado carregado ---------- */
   let DATES = [], WEEKS = [], HIST = {}, POS = [], AVATARS = {}, CUR = 0;
@@ -42,7 +42,8 @@
           KEYS.forEach(k => { HIST[m.nome][k] = new Array(DATES.length).fill(null); });
         }
         HIST[m.nome].classe = m.classe;
-        KEYS.forEach(k => { HIST[m.nome][k][w] = m[k] == null ? 0 : m[k]; });
+        // null = sem dado nessa semana (semanas antigas só têm poder e disputa)
+        KEYS.forEach(k => { HIST[m.nome][k][w] = m[k] == null ? null : m[k]; });
       });
     });
     // posição: a do arquivo (planilha); se faltar, ordena por poder
@@ -61,10 +62,10 @@
     return wk.membros.map(src => {
       const o = { nome: src.nome, classe: src.classe, pos: POS[w][src.nome], prev: {}, delta: {} };
       KEYS.forEach(k => {
-        o[k] = src[k] == null ? 0 : src[k];
+        o[k] = src[k] == null ? null : src[k];
         const p = w > 0 ? HIST[src.nome][k][w - 1] : null;
         o.prev[k] = p;
-        o.delta[k] = p == null ? null : +(o[k] - p).toFixed(2);
+        o.delta[k] = (p == null || o[k] == null) ? null : +(o[k] - p).toFixed(2);
       });
       const pp = w > 0 ? POS[w - 1][src.nome] : undefined;
       if (w > 0) o.mv = pp == null ? 'N' : pp === o.pos ? '=' : (pp > o.pos ? '+' : '-') + Math.abs(pp - o.pos);
@@ -73,8 +74,10 @@
     }).sort((a, b) => a.pos - b.pos);
   }
 
-  const by = (list, k) => [...list].sort((a, b) => b[k] - a[k]);
-  const leaders = (list, k, n) => by(list, k).slice(0, n || 3);
+  const has = (list, k) => list.filter(p => p[k] != null);
+  const val = (p, k) => p[k] == null ? -Infinity : p[k];
+  const by = (list, k) => [...list].sort((a, b) => val(b, k) === val(a, k) ? 0 : val(b, k) > val(a, k) ? 1 : -1);
+  const leaders = (list, k, n) => by(has(list, k), k).slice(0, n || 3);
   const climbers = (list, k) => list.filter(p => p.delta[k] != null).sort((a, b) => b.delta[k] - a.delta[k]);
   // valor com casas decimais numa coluna inteira = provável erro de digitação (ex.: 66,15)
   const suspect = (p, k) => isDec(p[k]);
@@ -116,6 +119,8 @@
     Pistolas: 'M3 8h12.5v4H11l-1.2 5H6l1-5H3zM15.5 9.5H19M6 8V6.5',
     DB: 'M4 3l10 10M20 3 10 13M12.5 14.5l-3 3M11.5 14.5l3 3M8 18l-3 3.5M16 18l3 3.5',
     '2H': 'M12 2l1.6 3V15h-3.2V5L12 2zM7.5 15h9M12 15v5.5M10.3 21.5h3.4',
+    Arco: 'M7 3c7 2.5 7 15.5 0 18M7 3v18M4 12h15M16 9l3 3-3 3',
+    Orb: 'M12 3.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM9.2 8a3 3 0 0 1 2.3-1.8M9.5 14.5 8 21M14.5 14.5 16 21M7 21h10',
     camera: 'M4 8h3l1.5-2.5h7L17 8h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z',
     up: 'M12 19V5M6 11l6-6 6 6',
     alert: 'M12 3 2 20h20L12 3zM12 10v4M12 17h.01',
@@ -257,10 +262,13 @@
   function renderRanking(el, list, opts) {
     opts = opts || {};
     const ext = {};
-    M.forEach(m => { const v = list.map(p => p[m.k]); ext[m.k] = [Math.min.apply(null, v), Math.max.apply(null, v)]; });
+    M.forEach(m => { const v = list.map(p => p[m.k]).filter(x => x != null); ext[m.k] = [Math.min.apply(null, v), Math.max.apply(null, v)]; });
     const rows = [...list].sort((a, b) => {
+      const dir = rankState.asc ? 1 : -1;
       const x = a[rankState.k], y = b[rankState.k];
-      return (typeof x === 'string' ? x.localeCompare(y) : x - y) * (rankState.asc ? 1 : -1);
+      if (typeof x === 'string') return x.localeCompare(y) * dir;
+      const vx = x == null ? -Infinity : x, vy = y == null ? -Infinity : y;
+      return (vx === vy ? 0 : vx > vy ? 1 : -1) * dir;
     });
     const th = (k, label, cls) => '<th scope="col" class="' + (cls || '') + '"><button type="button" data-sort="' + k + '" aria-label="Ordenar por ' + label + '">' + label + (rankState.k === k ? (rankState.asc ? ' ▲' : ' ▼') : '') + '</button></th>';
     let h = '<div class="bz-table-wrap"><table class="bz-table"><thead><tr>' + th('pos', '#', 'bz-c-pos') + '<th class="bz-c-mv"><span class="bz-sr">Movimento</span></th>' + th('nome', 'Membro', 'bz-c-name') + th('classe', 'Classe', 'bz-c-cls');
@@ -271,6 +279,7 @@
         '<td class="bz-c-name"><span class="bz-who">' + avatar(p, 'bz-av-xs') + '<span>' + esc(p.nome) + '</span></span></td>' +
         '<td class="bz-c-cls"><span class="bz-cls" title="' + (CLASSES[p.classe] || p.classe) + '">' + icon(p.classe, 16) + esc(p.classe) + '</span></td>';
       M.forEach(m => {
+        if (p[m.k] == null) { h += '<td class="bz-c-num"><span class="bz-heat bz-nodata" title="Sem dado nesta semana">–</span></td>'; return; }
         const [a, b] = ext[m.k], t = (p[m.k] - a) / ((b - a) || 1);
         const top = p[m.k] === b, sus = suspect(p, m.k);
         h += '<td class="bz-c-num"><span class="bz-heat' + (top ? ' bz-top' : '') + (sus ? ' bz-sus' : '') + '" style="--mc:var(--m-' + m.k + ');--t:' + t.toFixed(2) + '"' + (sus ? ' title="Valor com casas decimais: confira se foi digitado no formato certo"' : top ? ' title="Melhor da guilda"' : '') + '>' + fmt(p[m.k]) + '</span></td>';
@@ -296,7 +305,7 @@
     const hist = HIST[p.nome];
     const posHist = POS.slice(0, w + 1).map(map => map[p.nome]).filter(v => v != null);
     const best = Math.min.apply(null, posHist);
-    const weeksIn = hist.poder.slice(0, w + 1).filter(v => v != null).length;
+    const weeksIn = posHist.length;
     let h = '<div class="bz-prof-head">' +
       '<div class="bz-prof-photo">' + avatar(p, 'bz-av-xl') +
       (canEdit() ? '<div class="bz-photo-actions"><button type="button" class="bz-btn bz-btn-photo" data-photo="' + esc(p.nome) + '">' + icon('camera', 16) + 'Trocar foto</button></div>' : '') + '</div>' +
@@ -305,15 +314,16 @@
       '<label class="bz-prof-pick" for="bz-member">Membro<select id="bz-member">' + [...list].sort((a, b) => a.nome.localeCompare(b.nome)).map(x => '<option' + (x.nome === p.nome ? ' selected' : '') + '>' + esc(x.nome) + '</option>').join('') + '</select></label></div>';
     h += '<div class="bz-mgrid">';
     M.forEach(m => {
-      const avg = list.reduce((a, x) => a + x[m.k], 0) / list.length;
-      const rk = by(list, m.k).findIndex(x => x.nome === p.nome) + 1;
+      const have = has(list, m.k);
+      const avg = have.length ? have.reduce((a, x) => a + x[m.k], 0) / have.length : null;
+      const rk = p[m.k] == null ? null : by(have, m.k).findIndex(x => x.nome === p.nome) + 1;
       const d = p.delta[m.k];
       const vals = hist[m.k].slice(0, w + 1);
       h += '<article class="bz-mcard" style="--mc:var(--m-' + m.k + ')"><header><span class="bz-mlabel">' + icon(m.icon, 18) + m.l + '</span>' +
         (d != null ? '<span class="bz-delta ' + (d > 0 ? 'up' : d < 0 ? 'down' : 'eq') + '">' + fmtDelta(m.k, d) + '</span>' : '') + '</header>' +
         '<div class="bz-mval' + (suspect(p, m.k) ? ' bz-sus' : '') + '">' + fmtVal(m.k, p[m.k]) + '</div>' + spark(vals, avg) +
-        '<footer><span>' + rk + 'º de ' + list.length + ' na guilda</span><span>média ' + fmtVal(m.k, Math.round(avg)) + '</span></footer>' +
-        '<div class="bz-rankbar" aria-hidden="true"><i style="width:' + ((1 - (rk - 1) / list.length) * 100).toFixed(0) + '%"></i></div></article>';
+        '<footer><span>' + (rk ? rk + 'º de ' + have.length + ' na guilda' : 'sem dado nesta semana') + '</span><span>' + (avg == null ? '' : 'média ' + fmtVal(m.k, Math.round(avg))) + '</span></footer>' +
+        '<div class="bz-rankbar" aria-hidden="true"><i style="width:' + (rk ? ((1 - (rk - 1) / have.length) * 100).toFixed(0) : 0) + '%"></i></div></article>';
     });
     h += '</div><p class="bz-footnote">Linha tracejada: média da guilda na semana.</p>';
     el.innerHTML = h;
@@ -337,17 +347,18 @@
     const prev = w > 0 ? week(w - 1) : null;
     const sum = (l, k) => l.reduce((a, p) => a + (p[k] || 0), 0);
     const tp = sum(list, 'poder'), tpp = prev ? sum(prev, 'poder') : null;
-    const tprov = sum(list, 'provacao'), tprovp = prev ? sum(prev, 'provacao') : null;
+    const tprov = has(list, 'provacao').length ? sum(list, 'provacao') : null, tprovp = prev ? sum(prev, 'provacao') : null;
     const novos = list.filter(p => p.mv === 'N').length;
-    const maxD = Math.max.apply(null, list.map(p => p.dungeon));
+    const dg = has(list, 'dungeon');
+    const maxD = dg.length ? Math.max.apply(null, dg.map(p => p.dungeon)) : null;
     const pct = (a, b) => { const v = (a - b) / b * 100; return (v >= 0 ? '▲ ' : '▼ ') + Math.abs(v).toFixed(1).replace('.', ',') + '%'; };
     const dsum = (a, b) => (a - b >= 0 ? '▲ ' : '▼ ') + fmt(Math.abs(a - b)) + ' andares';
     const kpis = [
       { l: 'Poder total', v: fmt(Math.round(tp)) + 'K', d: tpp ? pct(tp, tpp) + ' na semana' : 'primeira semana' },
       { l: 'Poder médio', v: fmt(Math.round(tp / list.length)) + 'K', d: 'por membro' },
       { l: 'Membros', v: list.length, d: novos ? novos + (novos > 1 ? ' novatos' : ' novato') : 'sem novatos' },
-      { l: 'Dungeon ' + maxD, v: list.filter(p => p.dungeon === maxD).length, d: 'membros no nível máximo' },
-      { l: 'Provação somada', v: fmt(tprov), d: tprovp ? dsum(tprov, tprovp) : 'andares somados' }
+      maxD == null ? { l: 'Dungeon', v: '–', d: 'sem dado nesta semana' } : { l: 'Dungeon ' + maxD, v: dg.filter(p => p.dungeon === maxD).length, d: 'membros no nível máximo' },
+      tprov == null ? { l: 'Provação somada', v: '–', d: 'sem dado nesta semana' } : { l: 'Provação somada', v: fmt(tprov), d: tprovp ? dsum(tprov, tprovp) : 'andares somados' }
     ];
     let h = '<div class="bz-kpis">' + kpis.map(k => '<div class="bz-kpi"><div class="bz-kpi-l">' + k.l + '</div><div class="bz-kpi-v">' + k.v + '</div><div class="bz-kpi-d">' + k.d + '</div></div>').join('') + '</div>';
     const totals = DATES.slice(0, w + 1).map((_, i) => sum(week(i), 'poder'));
@@ -413,7 +424,7 @@
   }
 
   window.BZ = {
-    app, load, week, M, KEYS, CLASSES, by, leaders, climbers, suspect, alerts,
+    app, load, week, M, KEYS, CLASSES, has, by, leaders, climbers, suspect, alerts,
     fmt, fmtVal, fmtDelta, fmtDate, esc, slug, icon, avatar, avatarURL, setPending, squareImage, chooseFile, canEdit, toast,
     logoSVG, spark, mvHTML, renderRanking, renderProfile, renderGuild,
     get DATES() { return DATES; }, get WEEKS() { return WEEKS; }, get AVATARS() { return AVATARS; }, get CUR() { return CUR; }

@@ -51,6 +51,7 @@
     let h = '<h2 class="sec">Campeões da semana <small>um por modalidade</small></h2><div class="champs">';
     M.forEach(m => {
       const top = leaders(list, m.k, 3), p = top[0];
+      if (!p) { h += '<article class="hcard hcard-empty" data-k="' + m.k + '" style="--mc:var(--m-' + m.k + ')"><span class="tag">' + icon(m.icon, 16) + m.short + '</span><p class="empty">Sem dado nesta semana</p></article>'; return; }
       h += '<article class="hcard" data-k="' + m.k + '" style="--mc:var(--m-' + m.k + ')">' +
         '<span class="tag">' + icon(m.icon, 16) + m.short + '</span>' +
         '<div class="frame" data-member="' + esc(p.nome) + '"><div class="name"><span class="cls">' + icon(p.classe, 16) + '</span>' + esc(p.nome) + '</div>' +

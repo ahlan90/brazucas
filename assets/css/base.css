@@ -115,3 +115,6 @@ h1,h2,h3{text-wrap:balance;margin:0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .bz-error{background:var(--surface);border:1px solid var(--down);border-radius:var(--radius);padding:14px 16px}
 .bz-error code{background:var(--surface2);padding:1px 6px;border-radius:4px}
+
+/* sem dado nesta semana (semanas antigas só têm algumas modalidades) */
+.bz-heat.bz-nodata{background:none;color:var(--muted)}

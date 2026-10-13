@@ -1,0 +1,26 @@
+{
+  "data": "2026-06-02",
+  "membros": [
+    {"posicao": 1, "nome": "Torr", "classe": "DB", "poder": 366, "disputa": 184},
+    {"posicao": 2, "nome": "Gucci", "classe": "DB", "poder": 316, "disputa": 160},
+    {"posicao": 3, "nome": "Kennedy", "classe": "2H", "poder": 304, "disputa": 173},
+    {"posicao": 4, "nome": "LeGiON", "classe": "Arco", "poder": 298, "disputa": 169},
+    {"posicao": 5, "nome": "FAROFA", "classe": "Orb", "poder": 284, "disputa": 139},
+    {"posicao": 6, "nome": "Thorny", "classe": "2H", "poder": 272, "disputa": 100},
+    {"posicao": 7, "nome": "Abrobaa", "classe": "2H", "poder": 261, "disputa": 144},
+    {"posicao": 8, "nome": "Xelfs", "classe": "Pistolas", "poder": 256, "disputa": 165},
+    {"posicao": 9, "nome": "Vaguinho", "classe": "2H", "poder": 245, "disputa": 119},
+    {"posicao": 10, "nome": "Dosinfernos", "classe": "2H", "poder": 229, "disputa": 140},
+    {"posicao": 11, "nome": "Crowkiller", "classe": "2H", "poder": 228, "disputa": 115},
+    {"posicao": 12, "nome": "Kensed", "classe": "2H", "poder": 216, "disputa": 113},
+    {"posicao": 13, "nome": "Fallen", "classe": "2H", "poder": 228, "disputa": 111},
+    {"posicao": 14, "nome": "EroSennin", "classe": "Rifle", "poder": 212, "disputa": 96},
+    {"posicao": 15, "nome": "TiaDaLimpeza", "classe": "2H", "poder": 217, "disputa": 106},
+    {"posicao": 16, "nome": "Creed", "classe": "Pistolas", "poder": 180, "disputa": 85},
+    {"posicao": 17, "nome": "Buko", "classe": "2H", "poder": 161, "disputa": 76},
+    {"posicao": 18, "nome": "rafaelo", "classe": "2H", "poder": 145, "disputa": 83},
+    {"posicao": 19, "nome": "Moby", "classe": "2H", "poder": 139, "disputa": 91},
+    {"posicao": 20, "nome": "ROY4LSz", "classe": "Staff", "poder": 130, "disputa": 91},
+    {"posicao": 21, "nome": "vagnerwentz", "classe": "Arco", "poder": 125, "disputa": 50}
+  ]
+}
