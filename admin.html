@@ -11,12 +11,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@400;900&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/arena.css">
+<script src="assets/js/auth.js"></script>
+<script>BZAUTH.require('administrador');</script>
 </head>
 <body>
 <header class="hero">
   <div class="wrap hero-in">
     <div class="brand"><h1 id="logoSlot">Brazucas</h1><p>Área do admin</p></div>
-    <div class="hero-side"><a class="gbtn" href="index.html">Ver o site</a></div>
+    <div class="hero-side"><a class="gbtn" href="index.html">Ver o site</a><a class="gbtn" href="#" onclick="BZAUTH.logout();return false">Sair</a></div>
   </div>
 </header>
 <main class="wrap adm" style="padding-block:22px 60px">

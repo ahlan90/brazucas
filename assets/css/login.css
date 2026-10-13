@@ -1,0 +1,118 @@
+/* Tela de login (login.html): tokens do tema Arena + componentes próprios. */
+:root{
+  color-scheme:dark;
+  --bg:#141c2a; --surface:#1f2b40; --surface2:#2a3a55; --line:#34476a;
+  --fg:#f3f6fb; --muted:#9fb0cb; --accent:#ffc928; --on-accent:#1a1300;
+  --up:#7ee05a; --down:#ff5d6c; --new:#4cc3ff; --purple:#b061ff;
+  --ink:#0b111b;
+  --f-display:'Londrina Solid','Arial Black',Impact,sans-serif; --f-body:'Nunito',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--f-body);color:var(--fg);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{display:block}
+button,input{font:inherit}
+a{color:var(--accent)}
+
+/* fundo com arte do jogo */
+.bgart{position:fixed;inset:0;z-index:-2;background:url(../game/keyart.webp) center 30%/cover no-repeat;transform:scale(1.04)}
+.bgart::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,18,30,.35) 0%,rgba(12,18,30,.55) 45%,rgba(12,18,30,.9) 100%)}
+/* pétalas caindo */
+.petals{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.petals i{position:absolute;top:-4vh;width:10px;height:7px;border-radius:60% 40% 60% 40%;background:#ffa3c7;opacity:.85;animation:fall linear infinite;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+@keyframes fall{0%{transform:translate3d(0,-5vh,0) rotate(0)}100%{transform:translate3d(60px,105vh,0) rotate(520deg)}}
+@media (prefers-reduced-motion:reduce){.petals{display:none}}
+
+/* layout: topo / formulário centrado no viewport / rodapé */
+.page{min-height:100dvh;display:grid;grid-template-rows:1fr auto 1fr;gap:12px;padding:22px 16px 14px}
+.top,.mid,.bot{width:100%;max-width:520px;justify-self:center}
+.top{align-self:start;display:grid;gap:12px}
+.mid{max-width:420px}
+.bot{align-self:end}
+
+/* placa do clã = cabeçalho: meia largura, roxo do brasão, brasão sobre a borda */
+.plaque{position:relative;justify-self:center;width:min(100%,210px);margin-top:22px;padding:24px 10px 9px;display:grid;gap:3px;justify-items:center;text-align:center;border:3px solid var(--ink);border-radius:16px;background:linear-gradient(180deg,#4a2d8a,#2a1a55 60%,#1d1240);box-shadow:0 5px 0 var(--ink),inset 0 2px 0 rgba(255,255,255,.14),inset 0 0 0 2px rgba(176,97,255,.35)}
+.crest{position:absolute;left:50%;top:-21px;transform:translateX(-50%);width:42px;height:42px;filter:drop-shadow(0 3px 0 var(--ink))}
+.plaque .nm{margin:0;font-family:var(--f-display);font-weight:400;font-size:19px;line-height:1;color:#fff;text-shadow:0 2px 0 var(--ink);display:flex;align-items:baseline;justify-content:center;gap:6px;flex-wrap:wrap}
+.plaque .nm small{font-size:11px;color:#e4c9ff;letter-spacing:.04em}
+.plaque .ds{margin:0;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c9b3f2}
+.plaque .lv{margin-top:4px;font-family:var(--f-display);font-size:12px;letter-spacing:.03em;color:var(--on-accent);background:linear-gradient(180deg,#ffe08a,#ffb000);border:2px solid var(--ink);border-radius:8px;padding:2px 9px;box-shadow:0 2px 0 var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.4)}
+
+/* mini cards de estatística */
+.minis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini{display:flex;align-items:center;gap:8px;padding:8px 10px;border:3px solid var(--ink);border-radius:12px;background:linear-gradient(180deg,#1c2a44,#111a2c);box-shadow:0 4px 0 var(--ink),inset 0 0 0 2px color-mix(in srgb,var(--sc,#4cc3ff) 30%,transparent);min-width:0}
+.mini .ic{width:36px;height:36px;flex:none;filter:drop-shadow(0 2px 0 var(--ink))}
+.mini>div{min-width:0}
+.mini .k{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .v{font-family:var(--f-display);font-size:19px;line-height:1.1;color:var(--sc,#fff);text-shadow:0 2px 0 var(--ink);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.mini .v.nogap{gap:0}
+.mini .v .med{width:16px;height:16px}
+.pesq b{font-weight:400}.pesq .r{color:#ff5d6c}.pesq .g{color:#7ee05a}.pesq .p{color:#c58cff}.pesq .s{color:var(--muted);font-size:14px;margin:0 1px}
+.mini[data-k="rank"]{--sc:#ffc928}.mini[data-k="raid"]{--sc:#ff5d6c}.mini[data-k="poder"]{--sc:#ffc928}.mini[data-k="pesq"]{--sc:#7ee05a}
+
+/* card de login (~20% menor) */
+.card{width:100%;border:3px solid var(--ink);border-radius:15px;background:linear-gradient(180deg,rgba(31,43,64,.96),rgba(20,28,42,.97));box-shadow:0 5px 0 var(--ink),0 14px 32px rgba(0,0,0,.45);padding:16px;backdrop-filter:blur(6px)}
+.card h2{margin:0 0 11px;font-family:var(--f-display);font-weight:400;font-size:21px;display:flex;align-items:center;gap:8px;text-shadow:0 2px 0 var(--ink)}
+.card h2 small{margin-left:auto;font-family:var(--f-body);font-size:10px;color:var(--muted);font-weight:700;text-shadow:none}
+
+/* formulário */
+.form{display:grid;gap:10px}
+.field{display:grid;gap:4px;font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.02em}
+.inp{position:relative;display:flex;align-items:center}
+.inp svg{position:absolute;left:10px;width:16px;height:16px;color:var(--muted);pointer-events:none;transition:.15s}
+.inp input{width:100%;padding:9px 36px 9px 34px;border:2px solid var(--ink);border-radius:10px;background:#0f1726;color:#fff;font-weight:700;font-size:14px;box-shadow:inset 0 2px 5px rgba(0,0,0,.5);outline:0;transition:.15s}
+.inp input::placeholder{color:#5e7193;font-weight:600}
+.inp input:focus{border-color:var(--accent);box-shadow:inset 0 2px 5px rgba(0,0,0,.5),0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+.inp:focus-within svg{color:var(--accent)}
+.inp .eye{position:absolute;right:6px;width:26px;height:26px;border:0;border-radius:7px;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.inp .eye:hover{background:var(--surface2);color:#fff}
+.inp .eye svg{position:static;width:16px;height:16px}
+.inp.bad input{border-color:var(--down);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.err{min-height:14px;font-size:11px;font-weight:800;color:var(--down)}
+.opts{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;font-weight:800;color:var(--muted)}
+.opts label{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.opts input{accent-color:var(--accent);width:13px;height:13px}
+
+/* botão do jogo */
+.gbtn{--c:#ffb800;--d:#c26a00;appearance:none;border:2px solid var(--ink);border-radius:11px;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 75%,#fff) 0%,var(--c) 45%,var(--d) 100%);box-shadow:0 4px 0 var(--ink),inset 0 2px 0 rgba(255,255,255,.35);color:#2a1500;font-family:var(--f-display);font-size:19px;letter-spacing:.04em;padding:8px 18px 9px;cursor:pointer;text-shadow:0 1px 0 rgba(255,255,255,.4);display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .08s,filter .15s;width:100%}
+.gbtn:hover{filter:brightness(1.06)}
+.gbtn:active,.gbtn.busy{transform:translateY(2px);box-shadow:0 2px 0 var(--ink)}
+.gbtn.busy{pointer-events:none;filter:saturate(.6)}
+.gbtn .spin{width:16px;height:16px;border:3px solid rgba(0,0,0,.25);border-top-color:#2a1500;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.gbtn.busy .spin{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#1f2b40;border:3px solid var(--ink);border-radius:14px;padding:10px 16px;font-weight:800;box-shadow:0 5px 0 var(--ink);transition:.25s;z-index:9;display:flex;gap:10px;align-items:center;max-width:calc(100vw - 32px)}
+.toast.on{transform:translate(-50%,0);opacity:1}
+.toast.ok{border-color:#0f2208;background:linear-gradient(180deg,#b6f59a,#5fcf3a);color:#0f2208}
+
+.note{margin:0;font-size:12px;color:var(--muted);font-weight:700;text-align:center}
+
+/* desktop: placa + cards na largura do form, encostados nele por cima, com respiro */
+@media (min-width:481px){
+  .top{max-width:420px;align-self:end}
+  .mid{margin-top:26px}
+}
+
+/* celular */
+@media (max-width:480px){
+  .page{padding:18px 12px 10px;gap:8px;grid-template-rows:.8fr auto 1.2fr}
+  .top{gap:8px}
+  .mid{margin-top:30px}
+  .plaque{width:min(100%,160px);margin-top:18px;padding:19px 8px 7px;gap:2px}
+  .crest{width:34px;height:34px;top:-17px}
+  .plaque .nm{font-size:15px}
+  .plaque .nm small{font-size:9px}
+  .plaque .ds{font-size:8px}
+  .plaque .lv{font-size:11px;padding:1px 8px;margin-top:3px}
+  .minis{gap:6px}
+  .mini{padding:4px 6px;gap:5px;border-width:2px;border-radius:9px;box-shadow:0 3px 0 var(--ink),inset 0 0 0 2px color-mix(in srgb,var(--sc,#4cc3ff) 30%,transparent)}
+  .mini .ic{width:22px;height:22px}
+  .mini .k{font-size:8.5px}
+  .mini .v{font-size:13px}
+  .mini .v .med{width:12px;height:12px}
+  .pesq .s{font-size:11px}
+  .card{padding:14px 12px}
+}

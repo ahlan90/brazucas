@@ -118,3 +118,16 @@ h1,h2,h3{text-wrap:balance;margin:0}
 
 /* sem dado nesta semana (semanas antigas só têm algumas modalidades) */
 .bz-heat.bz-nodata{background:none;color:var(--muted)}
+
+/* filtros do ranking */
+.bz-rank-tools{display:flex;align-items:center;gap:12px;margin:0 0 10px;color:var(--muted);font-weight:700;font-size:14px}
+.bz-btn-sm{padding:4px 10px;font-size:13px}
+.bz-filt th{padding:4px 6px;font-weight:500}
+.bz-filt input,.bz-filt select{width:100%;min-width:0;padding:5px 7px;font-size:13px;border:2px solid var(--line);border-radius:8px;background:var(--surface2);color:var(--fg)}
+.bz-filt input::placeholder{color:var(--muted);opacity:.7}
+.bz-filt input:focus,.bz-filt select:focus{border-color:var(--accent);outline:none}
+.bz-filt .bz-filt-on{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.bz-filt .bz-c-num input{min-width:64px;text-align:right}
+.bz-filt .bz-c-pos input{min-width:44px;text-align:center}
+.bz-filt .bz-c-mv select{min-width:56px}
+.bz-filt .bz-c-name input{min-width:120px}

@@ -258,7 +258,29 @@
     return '<span class="bz-mv ' + (up ? 'bz-mv-up' : 'bz-mv-down') + '" title="' + (up ? 'Subiu ' : 'Caiu ') + mv.slice(1) + '">' + (up ? '▲' : '▼') + mv.slice(1) + '</span>';
   }
 
-  const rankState = { k: 'pos', asc: true };
+  const rankState = { k: 'pos', asc: true, f: {} };
+  const norm = s => String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  // filtro numérico: "300", ">300", "<=100", "100-200" (aceita vírgula decimal e sufixo K)
+  function numTest(expr) {
+    expr = norm(expr).replace(/\s|k/g, '').replace(',', '.');
+    if (!expr) return null;
+    let m = expr.match(/^(>=|<=|>|<|=)?(-?\d+(?:\.\d+)?)$/);
+    if (m) { const op = m[1] || '=', n = +m[2]; return v => v != null && (op === '>' ? v > n : op === '<' ? v < n : op === '>=' ? v >= n : op === '<=' ? v <= n : v === n); }
+    m = expr.match(/^(-?\d+(?:\.\d+)?)-(-?\d+(?:\.\d+)?)$/);
+    if (m) { const a = Math.min(+m[1], +m[2]), b = Math.max(+m[1], +m[2]); return v => v != null && v >= a && v <= b; }
+    return null;
+  }
+  function rowTest(f) {
+    const tests = [];
+    Object.keys(f).forEach(k => {
+      const raw = f[k]; if (raw == null || raw === '') return;
+      if (k === 'nome') { const q = norm(raw); tests.push(p => norm(p.nome).indexOf(q) >= 0); }
+      else if (k === 'classe') tests.push(p => p.classe === raw);
+      else if (k === 'mv') tests.push(p => raw === 'N' ? p.mv === 'N' : raw === '=' ? (p.mv === '=' || p.mv == null) : raw === 'up' ? (p.mv && p.mv[0] === '+') : (p.mv && p.mv[0] === '-'));
+      else { const t = numTest(raw); if (t) tests.push(p => t(p[k])); }
+    });
+    return p => tests.every(t => t(p));
+  }
   function renderRanking(el, list, opts) {
     opts = opts || {};
     const ext = {};
@@ -270,9 +292,19 @@
       const vx = x == null ? -Infinity : x, vy = y == null ? -Infinity : y;
       return (vx === vy ? 0 : vx > vy ? 1 : -1) * dir;
     });
+    const f = rankState.f, fv = k => esc(f[k] || '');
     const th = (k, label, cls) => '<th scope="col" class="' + (cls || '') + '"><button type="button" data-sort="' + k + '" aria-label="Ordenar por ' + label + '">' + label + (rankState.k === k ? (rankState.asc ? ' ▲' : ' ▼') : '') + '</button></th>';
-    let h = '<div class="bz-table-wrap"><table class="bz-table"><thead><tr>' + th('pos', '#', 'bz-c-pos') + '<th class="bz-c-mv"><span class="bz-sr">Movimento</span></th>' + th('nome', 'Membro', 'bz-c-name') + th('classe', 'Classe', 'bz-c-cls');
+    const fin = (k, label, ph) => '<th class="bz-c-num"><input data-f="' + k + '" value="' + fv(k) + '" placeholder="' + (ph || '> 0') + '" aria-label="Filtrar ' + label + '" autocomplete="off"></th>';
+    const classes = [...new Set(list.map(p => p.classe))].sort();
+    let h = '<div class="bz-rank-tools"><span class="bz-rank-count" data-count></span><button type="button" class="bz-btn bz-btn-sm" data-clear hidden>Limpar filtros</button></div>';
+    h += '<div class="bz-table-wrap"><table class="bz-table"><thead><tr>' + th('pos', '#', 'bz-c-pos') + '<th class="bz-c-mv"><span class="bz-sr">Movimento</span></th>' + th('nome', 'Membro', 'bz-c-name') + th('classe', 'Classe', 'bz-c-cls');
     M.forEach(m => { h += th(m.k, m.short, 'bz-c-num'); });
+    h += '</tr><tr class="bz-filt">' +
+      '<th class="bz-c-pos"><input data-f="pos" value="' + fv('pos') + '" placeholder="#" aria-label="Filtrar posição" autocomplete="off"></th>' +
+      '<th class="bz-c-mv"><select data-f="mv" aria-label="Filtrar movimento">' + [['', '↕'], ['up', '▲ Subiu'], ['down', '▼ Caiu'], ['=', '– Manteve'], ['N', 'Novo']].map(o => '<option value="' + o[0] + '"' + (f.mv === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></th>' +
+      '<th class="bz-c-name"><input data-f="nome" value="' + fv('nome') + '" placeholder="Buscar nome" aria-label="Filtrar membro" autocomplete="off"></th>' +
+      '<th class="bz-c-cls"><select data-f="classe" aria-label="Filtrar classe"><option value="">Todas</option>' + classes.map(c => '<option value="' + esc(c) + '"' + (f.classe === c ? ' selected' : '') + '>' + esc(CLASSES[c] || c) + '</option>').join('') + '</select></th>';
+    M.forEach(m => { h += fin(m.k, m.l, m.k === 'poder' || m.k === 'disputa' ? '> 300' : '> 0'); });
     h += '</tr></thead><tbody>';
     rows.forEach(p => {
       h += '<tr data-member="' + esc(p.nome) + '" tabindex="0"><td class="bz-c-pos">' + p.pos + '</td><td class="bz-c-mv">' + mvHTML(p.mv) + '</td>' +
@@ -288,6 +320,18 @@
     });
     h += '</tbody></table></div>';
     el.innerHTML = h;
+    const trs = el.querySelectorAll('tbody tr'), countEl = el.querySelector('[data-count]'), clearBtn = el.querySelector('[data-clear]');
+    function apply() {
+      const test = rowTest(rankState.f);
+      let n = 0;
+      trs.forEach((tr, i) => { const ok = test(rows[i]); tr.hidden = !ok; if (ok) n++; });
+      const active = Object.values(rankState.f).some(v => v);
+      countEl.textContent = active ? n + ' de ' + rows.length + ' membros' : rows.length + ' membros';
+      clearBtn.hidden = !active;
+      el.querySelectorAll('[data-f]').forEach(i => i.classList.toggle('bz-filt-on', !!rankState.f[i.dataset.f]));
+    }
+    el.querySelectorAll('[data-f]').forEach(i => i.oninput = () => { rankState.f[i.dataset.f] = i.value; apply(); });
+    clearBtn.onclick = () => { rankState.f = {}; renderRanking(el, list, opts); };
     el.querySelectorAll('[data-sort]').forEach(b => b.onclick = () => {
       const k = b.dataset.sort;
       rankState.asc = rankState.k === k ? !rankState.asc : (k === 'pos' || k === 'nome' || k === 'classe');
@@ -297,6 +341,7 @@
       const go = () => opts.onPick && opts.onPick(tr.dataset.member);
       tr.onclick = go; tr.onkeydown = e => { if (e.key === 'Enter') go(); };
     });
+    apply();
   }
 
   function renderProfile(el, list, w, nome, opts) {

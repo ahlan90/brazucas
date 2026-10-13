@@ -11,7 +11,7 @@
     {"posicao": 8, "nome": "Xelfs", "classe": "Pistolas", "poder": 256, "disputa": 165},
     {"posicao": 9, "nome": "Vaguinho", "classe": "2H", "poder": 245, "disputa": 119},
     {"posicao": 10, "nome": "Dosinfernos", "classe": "2H", "poder": 229, "disputa": 140},
-    {"posicao": 11, "nome": "Crowkiller", "classe": "2H", "poder": 228, "disputa": 115},
+    {"posicao": 11, "nome": "CrowKiller", "classe": "2H", "poder": 228, "disputa": 115},
     {"posicao": 12, "nome": "Kensed", "classe": "2H", "poder": 216, "disputa": 113},
     {"posicao": 13, "nome": "Fallen", "classe": "2H", "poder": 228, "disputa": 111},
     {"posicao": 14, "nome": "EroSennin", "classe": "Rifle", "poder": 212, "disputa": 96},

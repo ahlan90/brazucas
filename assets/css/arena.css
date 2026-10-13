@@ -72,7 +72,7 @@ h2.sec::after{content:"";flex:1;height:4px;border-radius:2px;background:linear-g
 .climb .cam{right:auto;left:46px;bottom:6px;width:26px;height:26px;border-radius:8px}
 
 /* pódio de poder */
-.podium{display:grid;grid-template-columns:1fr 1.2fr 1fr;align-items:end;gap:12px;max-width:620px;margin:0 auto}
+.podium{display:grid;grid-template-columns:1fr 1.2fr 1fr;align-items:end;gap:12px;max-width:620px;margin:0 auto 8px}
 .pd{text-align:center;display:grid;justify-items:center;gap:8px;cursor:pointer}
 .pd .bz-av{width:min(140px,100%);border:3px solid #0b111b;box-shadow:0 0 0 3px var(--pc)}
 .pd .n{font-family:var(--f-display);font-size:22px}
@@ -146,3 +146,8 @@ nav.tabs .admin-link:hover{color:var(--fg);background:var(--surface)}
 .climb>div{flex:1;min-width:0}
 .climb .d{display:inline-block;margin:5px 0 0;font-size:17px;padding:1px 10px}
 .hcard-empty .empty{grid-column:auto;margin-top:8px;padding:12px;font-size:13px;text-align:center}
+h2.sec .sec-ic{flex:none;filter:drop-shadow(0 3px 0 #0b111b)}
+nav.tabs .nav-right{margin-left:auto;display:flex;align-items:center;gap:2px}
+nav.tabs .nav-right .admin-link{margin-left:0}
+nav.tabs .user-name{color:var(--fg);cursor:default}
+nav.tabs .user-name:hover{background:none}
