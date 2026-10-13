@@ -14,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@400;900&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/arena.css">
+<link rel="stylesheet" href="assets/css/guilda.css">
 <script src="assets/js/auth.js"></script>
 <script>BZAUTH.require();</script>
 </head>
@@ -25,6 +26,7 @@
   </div>
 </header>
 <div class="wrap">
+  <section class="guild-strip" id="guildStrip" aria-label="Números da guilda"></section>
   <nav class="tabs" aria-label="Seções">
     <a class="gbtn" href="#hall" data-view="hall">Home</a>
     <a class="gbtn" href="#ranking" data-view="ranking">Ranking</a>
@@ -42,10 +44,12 @@
 </div>
 <script src="assets/js/core.js"></script>
 <script src="assets/js/github.js"></script>
+<script src="assets/js/guilda.js"></script>
 <script>
 (function(){
   const {M,leaders,climbers,fmt,fmtVal,fmtDelta,avatar,icon,esc} = BZ;
   document.getElementById('logoSlot').innerHTML = BZ.logoSVG(290);
+  BZGUILD.load().then(G => { document.getElementById('guildStrip').innerHTML = BZGUILD.minis(G); });
   const sess = BZAUTH.session();
   if (sess) {
     document.getElementById('userName').innerHTML = icon('user', 16) + esc(sess.nome);

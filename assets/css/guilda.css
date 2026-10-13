@@ -1,0 +1,23 @@
+/* Cards da guilda (ranking, poder do clã, raid, pesquisa). Usados no login e acima do menu do site. */
+.minis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini{display:flex;align-items:center;gap:8px;padding:8px 10px;border:3px solid #0b111b;border-radius:12px;background:linear-gradient(180deg,#1c2a44,#111a2c);box-shadow:0 4px 0 #0b111b,inset 0 0 0 2px color-mix(in srgb,var(--sc,#4cc3ff) 30%,transparent);min-width:0}
+.mini .ic{width:36px;height:36px;flex:none;filter:drop-shadow(0 2px 0 #0b111b)}
+.mini>div{min-width:0}
+.mini .k{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .v{font-family:var(--f-display);font-size:19px;line-height:1.1;color:var(--sc,#fff);text-shadow:0 2px 0 #0b111b;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.mini .v.nogap{gap:0}
+.mini .v .med{width:16px;height:16px}
+.pesq b{font-weight:400}.pesq .r{color:#ff5d6c}.pesq .g{color:#7ee05a}.pesq .p{color:#c58cff}.pesq .s{color:var(--muted);font-size:14px;margin:0 1px}
+.mini[data-k="rank"]{--sc:#ffc928}.mini[data-k="raid"]{--sc:#ff5d6c}.mini[data-k="poder"]{--sc:#ffc928}.mini[data-k="pesq"]{--sc:#7ee05a}
+/* faixa acima do menu, no site */
+.guild-strip{margin-top:16px}
+.guild-strip .minis{grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:640px){.guild-strip .minis{grid-template-columns:1fr 1fr;gap:8px}}
+@media (max-width:480px){
+  .mini{padding:4px 6px;gap:5px;border-width:2px;border-radius:9px;box-shadow:0 3px 0 #0b111b,inset 0 0 0 2px color-mix(in srgb,var(--sc,#4cc3ff) 30%,transparent)}
+  .mini .ic{width:22px;height:22px}
+  .mini .k{font-size:8.5px}
+  .mini .v{font-size:13px}
+  .mini .v .med{width:12px;height:12px}
+  .pesq .s{font-size:11px}
+}

@@ -38,17 +38,6 @@ a{color:var(--accent)}
 .plaque .ds{margin:0;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c9b3f2}
 .plaque .lv{margin-top:4px;font-family:var(--f-display);font-size:12px;letter-spacing:.03em;color:var(--on-accent);background:linear-gradient(180deg,#ffe08a,#ffb000);border:2px solid var(--ink);border-radius:8px;padding:2px 9px;box-shadow:0 2px 0 var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.4)}
 
-/* mini cards de estatística */
-.minis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mini{display:flex;align-items:center;gap:8px;padding:8px 10px;border:3px solid var(--ink);border-radius:12px;background:linear-gradient(180deg,#1c2a44,#111a2c);box-shadow:0 4px 0 var(--ink),inset 0 0 0 2px color-mix(in srgb,var(--sc,#4cc3ff) 30%,transparent);min-width:0}
-.mini .ic{width:36px;height:36px;flex:none;filter:drop-shadow(0 2px 0 var(--ink))}
-.mini>div{min-width:0}
-.mini .k{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini .v{font-family:var(--f-display);font-size:19px;line-height:1.1;color:var(--sc,#fff);text-shadow:0 2px 0 var(--ink);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.mini .v.nogap{gap:0}
-.mini .v .med{width:16px;height:16px}
-.pesq b{font-weight:400}.pesq .r{color:#ff5d6c}.pesq .g{color:#7ee05a}.pesq .p{color:#c58cff}.pesq .s{color:var(--muted);font-size:14px;margin:0 1px}
-.mini[data-k="rank"]{--sc:#ffc928}.mini[data-k="raid"]{--sc:#ff5d6c}.mini[data-k="poder"]{--sc:#ffc928}.mini[data-k="pesq"]{--sc:#7ee05a}
 
 /* card de login (~20% menor) */
 .card{width:100%;border:3px solid var(--ink);border-radius:15px;background:linear-gradient(180deg,rgba(31,43,64,.96),rgba(20,28,42,.97));box-shadow:0 5px 0 var(--ink),0 14px 32px rgba(0,0,0,.45);padding:16px;backdrop-filter:blur(6px)}
@@ -107,12 +96,5 @@ a{color:var(--accent)}
   .plaque .nm small{font-size:9px}
   .plaque .ds{font-size:8px}
   .plaque .lv{font-size:11px;padding:1px 8px;margin-top:3px}
-  .minis{gap:6px}
-  .mini{padding:4px 6px;gap:5px;border-width:2px;border-radius:9px;box-shadow:0 3px 0 var(--ink),inset 0 0 0 2px color-mix(in srgb,var(--sc,#4cc3ff) 30%,transparent)}
-  .mini .ic{width:22px;height:22px}
-  .mini .k{font-size:8.5px}
-  .mini .v{font-size:13px}
-  .mini .v .med{width:12px;height:12px}
-  .pesq .s{font-size:11px}
   .card{padding:14px 12px}
 }

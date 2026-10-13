@@ -49,7 +49,7 @@ login.html                 entrada (dados da guilda + formulário)
 index.html                 site (Home, Ranking, Perfil, Guilda)
 admin.html                 publicar semana e trocar fotos (só administrador)
 data/usuarios.json         usuários, perfis e hashes de senha
-data/guilda.json           nível, ranking, poder, raid e pesquisa da guilda (mostrados no login)
+data/guilda.json           nível, ranking, poder, raid e pesquisa da guilda (login e faixa acima do menu)
 data/index.json            lista de semanas publicadas
 data/semanas/AAAA-MM-DD.json   dados de cada semana (um membro por linha)
 data/avatares.json         nome do membro → arquivo da foto
@@ -58,6 +58,7 @@ assets/js/core.js          leitura dos dados, cálculos e componentes
 assets/js/github.js        gravação no repositório pela API do GitHub
 assets/js/auth.js          login, sessão e bloqueio por perfil
 assets/js/login.js         tela de login
+assets/js/guilda.js        cards da guilda (ranking, poder, raid, pesquisa)
 assets/css/                estilos (base.css + arena.css; login.css só na entrada)
 assets/game/               arte do jogo, logo e favicon
 ```

@@ -26,7 +26,8 @@ Deploy = push na `main`; o Pages republica em ~1 min. Setup inicial do Pages est
 - `data/usuarios.json`: `{algoritmo, iteracoes, usuarios:[{usuario, nome, perfil, salt, hash}]}`. `usuario` = nick em minúsculas; `nome` = nick como aparece nas semanas; `perfil` = `jogador` | `administrador`. Hash = PBKDF2-SHA256 (WebCrypto no navegador, `node:crypto` para gerar). Comando de gerar hash está no README.
 - `index.html` e `admin.html` carregam `auth.js` **no `<head>`** e chamam `BZAUTH.require()` / `BZAUTH.require('administrador')` antes de qualquer render: sem sessão → `login.html?next=…`; perfil insuficiente → `index.html`. Em segundo plano, `require` confere se o usuário ainda existe no JSON (removido = sessão encerrada).
 - Sessão: `localStorage['bz.sess']` ("lembrar") ou `sessionStorage['bz.sess']`, `{usuario, nome, perfil, t}`. `BZAUTH.logout()` limpa e volta ao login.
-- `login.html` tem CSS/JS próprios (`login.css`, `login.js`), não usa `core.js`. Os números do cabeçalho vêm de `data/guilda.json`.
+- `login.html` tem CSS/JS próprios (`login.css`, `login.js`), não usa `core.js`.
+- `assets/js/guilda.js` → `window.BZGUILD`: lê `data/guilda.json` (nível, ranking, poder, raid, pesquisa) e monta os 4 cards (`minis()`), com ícones SVG. Usado no login e na faixa `#guildStrip` acima do menu do `index.html`. Estilo em `assets/css/guilda.css` (carregado nas duas páginas).
 - É um portão de conveniência: o site é estático e `usuarios.json` é público. Não tratar como segurança.
 
 ### Dois módulos globais (IIFE), carregados nesta ordem
