@@ -131,3 +131,13 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .bz-filt .bz-c-pos input{min-width:44px;text-align:center}
 .bz-filt .bz-c-mv select{min-width:56px}
 .bz-filt .bz-c-name input{min-width:120px}
+
+/* ranking: linha do membro logado */
+.bz-table tbody tr.bz-me{background:color-mix(in srgb,var(--accent) 16%,transparent);box-shadow:inset 4px 0 0 var(--accent)}
+.bz-table tbody tr.bz-me:hover{background:color-mix(in srgb,var(--accent) 22%,transparent)}
+.bz-me-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--on-accent);background:var(--accent);border-radius:999px;padding:1px 8px}
+.bz-me-info{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
+.bz-me-info b{color:var(--fg);font-family:var(--f-num)}
+@keyframes bz-flash{0%{background:color-mix(in srgb,var(--accent) 55%,transparent)}100%{background:color-mix(in srgb,var(--accent) 16%,transparent)}}
+.bz-table tbody tr.bz-flash{animation:bz-flash 1.2s ease-out}
+.bz-rank-tools{flex-wrap:wrap}

@@ -258,7 +258,9 @@
     return '<span class="bz-mv ' + (up ? 'bz-mv-up' : 'bz-mv-down') + '" title="' + (up ? 'Subiu ' : 'Caiu ') + mv.slice(1) + '">' + (up ? '▲' : '▼') + mv.slice(1) + '</span>';
   }
 
-  const rankState = { k: 'pos', asc: true, f: {} };
+  const rankState = { k: 'pos', asc: true, f: {}, focoMe: false };
+  // nome do membro logado (vem do login); null se não houver sessão
+  const meuNome = () => { try { const s = window.BZAUTH && BZAUTH.session(); return s ? s.nome : null; } catch (e) { return null; } };
   const norm = s => String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   // filtro numérico: "300", ">300", "<=100", "100-200" (aceita vírgula decimal e sufixo K)
   function numTest(expr) {
@@ -296,7 +298,18 @@
     const th = (k, label, cls) => '<th scope="col" class="' + (cls || '') + '"><button type="button" data-sort="' + k + '" aria-label="Ordenar por ' + label + '">' + label + (rankState.k === k ? (rankState.asc ? ' ▲' : ' ▼') : '') + '</button></th>';
     const fin = (k, label, ph) => '<th class="bz-c-num"><input data-f="' + k + '" value="' + fv(k) + '" placeholder="' + (ph || '> 0') + '" aria-label="Filtrar ' + label + '" autocomplete="off"></th>';
     const classes = [...new Set(list.map(p => p.classe))].sort();
-    let h = '<div class="bz-rank-tools"><span class="bz-rank-count" data-count></span><button type="button" class="bz-btn bz-btn-sm" data-clear hidden>Limpar filtros</button></div>';
+    const me = meuNome(), euP = me ? list.find(p => p.nome === me) : null;
+    let meInfo = '';
+    if (euP) {
+      const mk = M.find(m => m.k === rankState.k);
+      let txt;
+      if (mk) {
+        if (euP[mk.k] == null) txt = 'sem dado de <b>' + mk.l + '</b> nesta semana';
+        else txt = '<b>' + (by(list.filter(p => p[mk.k] != null), mk.k).findIndex(p => p.nome === me) + 1) + 'º</b> em ' + mk.l;
+      } else txt = '<b>' + euP.pos + 'º</b> no geral';
+      meInfo = '<span class="bz-me-info">' + icon('user', 14) + 'Você: ' + txt + '</span><button type="button" class="bz-btn bz-btn-sm" data-goto-me>Ir para minha linha</button>';
+    }
+    let h = '<div class="bz-rank-tools">' + meInfo + '<span class="bz-rank-count" data-count></span><button type="button" class="bz-btn bz-btn-sm" data-clear hidden>Limpar filtros</button></div>';
     h += '<div class="bz-table-wrap"><table class="bz-table"><thead><tr>' + th('pos', '#', 'bz-c-pos') + '<th class="bz-c-mv"><span class="bz-sr">Movimento</span></th>' + th('nome', 'Membro', 'bz-c-name') + th('classe', 'Classe', 'bz-c-cls');
     M.forEach(m => { h += th(m.k, m.short, 'bz-c-num'); });
     h += '</tr><tr class="bz-filt">' +
@@ -307,8 +320,9 @@
     M.forEach(m => { h += fin(m.k, m.l, m.k === 'poder' || m.k === 'disputa' ? '> 300' : '> 0'); });
     h += '</tr></thead><tbody>';
     rows.forEach(p => {
-      h += '<tr data-member="' + esc(p.nome) + '" tabindex="0"><td class="bz-c-pos">' + p.pos + '</td><td class="bz-c-mv">' + mvHTML(p.mv) + '</td>' +
-        '<td class="bz-c-name"><span class="bz-who">' + avatar(p, 'bz-av-xs') + '<span>' + esc(p.nome) + '</span></span></td>' +
+      const ehEu = p.nome === me;
+      h += '<tr data-member="' + esc(p.nome) + '" tabindex="0"' + (ehEu ? ' class="bz-me" aria-current="true"' : '') + '><td class="bz-c-pos">' + p.pos + '</td><td class="bz-c-mv">' + mvHTML(p.mv) + '</td>' +
+        '<td class="bz-c-name"><span class="bz-who">' + avatar(p, 'bz-av-xs') + '<span>' + esc(p.nome) + '</span>' + (ehEu ? '<span class="bz-me-tag">você</span>' : '') + '</span></td>' +
         '<td class="bz-c-cls"><span class="bz-cls" title="' + (CLASSES[p.classe] || p.classe) + '">' + icon(p.classe, 16) + esc(p.classe) + '</span></td>';
       M.forEach(m => {
         if (p[m.k] == null) { h += '<td class="bz-c-num"><span class="bz-heat bz-nodata" title="Sem dado nesta semana">–</span></td>'; return; }
@@ -335,13 +349,23 @@
     el.querySelectorAll('[data-sort]').forEach(b => b.onclick = () => {
       const k = b.dataset.sort;
       rankState.asc = rankState.k === k ? !rankState.asc : (k === 'pos' || k === 'nome' || k === 'classe');
-      rankState.k = k; renderRanking(el, list, opts);
+      rankState.k = k; rankState.focoMe = true; renderRanking(el, list, opts);
     });
     el.querySelectorAll('tr[data-member]').forEach(tr => {
       const go = () => opts.onPick && opts.onPick(tr.dataset.member);
       tr.onclick = go; tr.onkeydown = e => { if (e.key === 'Enter') go(); };
     });
     apply();
+    const meuTr = el.querySelector('tr.bz-me');
+    function irParaMim() {
+      if (!meuTr) return;
+      if (meuTr.hidden) { toast('Sua linha está escondida pelos filtros. Use "Limpar filtros".'); return; }
+      meuTr.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      meuTr.classList.remove('bz-flash'); void meuTr.offsetWidth; meuTr.classList.add('bz-flash');
+    }
+    const gotoBtn = el.querySelector('[data-goto-me]');
+    if (gotoBtn) gotoBtn.onclick = irParaMim;
+    if (rankState.focoMe) { rankState.focoMe = false; if (meuTr && !meuTr.hidden) irParaMim(); }
   }
 
   function renderProfile(el, list, w, nome, opts) {
