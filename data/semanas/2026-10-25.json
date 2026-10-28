@@ -1,0 +1,29 @@
+{
+  "data": "2026-10-25",
+  "membros": [
+    {"nome": "Torr", "classe": "Pistolas", "poder": 522, "conquista": 12300, "fenda": 1697, "torre": 1218, "provacao": 3658},
+    {"nome": "LeGiON", "classe": "Pistolas", "poder": 511, "conquista": 12365, "fenda": 1921, "torre": 1296, "provacao": 3830},
+    {"nome": "Gucci", "classe": "Pistolas", "poder": 506, "conquista": 12055, "fenda": 1893, "torre": 1290, "provacao": 3332},
+    {"nome": "FreedBR", "classe": "Rifle", "poder": 504, "conquista": 11250, "fenda": 1057, "torre": 1073, "provacao": 2430},
+    {"nome": "Kennedy", "classe": "Rifle", "poder": 473, "conquista": 12340, "fenda": 1288, "torre": 1172, "provacao": 2760},
+    {"nome": "Xelfs", "classe": "Pistolas", "poder": 463, "conquista": 12560, "fenda": 2055, "torre": 1238, "provacao": 3230},
+    {"nome": "LestatDi", "classe": "2H", "poder": 458, "conquista": 11105, "fenda": 1611, "torre": 1109, "provacao": 3130},
+    {"nome": "Abrobaa", "classe": "Staff", "poder": 440, "conquista": 12410, "fenda": 1897, "torre": 1237, "provacao": 3240},
+    {"nome": "Exemplo", "classe": "Staff", "poder": 439, "conquista": 11205, "fenda": 1676, "torre": 1131, "provacao": 2610},
+    {"nome": "InvejaMATA", "classe": "2H", "poder": 431, "conquista": 11965, "fenda": 1374, "torre": 982, "provacao": 2200},
+    {"nome": "Dosinfernos", "classe": "Rifle", "poder": 424, "conquista": 11740, "fenda": 1393, "torre": 1094, "provacao": 2460},
+    {"nome": "Vaguinho", "classe": "Staff", "poder": 417, "conquista": 10805, "fenda": 1564, "torre": 1009, "provacao": 2985},
+    {"nome": "FallenShadwon", "classe": "Staff", "poder": 408, "conquista": 11765, "fenda": 1141, "torre": 1062, "provacao": 2368},
+    {"nome": "EroSennin", "classe": "Rifle", "poder": 401, "conquista": 10860, "fenda": 1152, "torre": 1009, "provacao": 2390},
+    {"nome": "Fallen", "classe": "Pistolas", "poder": 395, "conquista": 11195, "fenda": 1259, "torre": 1106, "provacao": 2250},
+    {"nome": "MeGaDuCk", "classe": "Rifle", "poder": 384, "conquista": 11510, "fenda": 1287, "torre": 1032, "provacao": 2263},
+    {"nome": "Rod", "classe": "Rifle", "poder": 384, "conquista": 10770, "fenda": 1204, "torre": 953, "provacao": 2145},
+    {"nome": "CrowKiller", "classe": "2H", "poder": 357, "fenda": 882, "torre": 849, "provacao": 1850},
+    {"nome": "Moby", "classe": "Rifle", "poder": 341, "conquista": 10760},
+    {"nome": "NewHero", "classe": "Pistolas", "poder": 336, "conquista": 10825, "fenda": 876, "torre": 795, "provacao": 1661},
+    {"nome": "Creed", "classe": "DB", "poder": 312, "conquista": 9805, "fenda": 742, "torre": 744, "provacao": 1362},
+    {"nome": "Toninho", "classe": "Rifle", "poder": 268, "conquista": 10505, "fenda": 448, "torre": 529, "provacao": 1370},
+    {"nome": "Nefra", "classe": "Rifle", "poder": 133, "conquista": 8305, "fenda": 106, "torre": 140, "provacao": 558},
+    {"nome": "PriceRs", "classe": "Pistolas", "poder": 58, "conquista": 6730, "fenda": 32, "torre": 69, "provacao": 240}
+  ]
+}

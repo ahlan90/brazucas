@@ -24,6 +24,6 @@
     {"nome": "Creed", "classe": "Pistolas", "poder": 298, "conquista": 9365, "fenda": 667, "torre": 721, "provacao": 1298},
     {"nome": "Toninho", "classe": "Rifle", "poder": 199, "conquista": 9645, "fenda": 363, "torre": 349, "provacao": 990},
     {"nome": "CoyoTe", "classe": "Rifle", "poder": 126, "conquista": 8720, "fenda": 210, "torre": 243, "provacao": 736},
-    {"nome": "PricePk", "classe": "Pistolas", "poder": 38, "conquista": 5485, "fenda": 20, "torre": 54, "provacao": 70}
+    {"nome": "PriceRs", "classe": "Pistolas", "poder": 38, "conquista": 5485, "fenda": 20, "torre": 54, "provacao": 70}
   ]
 }

@@ -1,1 +1,7 @@
 .playwright-mcp/
+
+# gravações de tela (grandes demais para o GitHub)
+*.mp4
+*.MP4
+*.mov
+*.MOV

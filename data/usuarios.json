@@ -3,7 +3,6 @@
   "iteracoes": 120000,
   "usuarios": [
     {"usuario":"abrobaa","nome":"Abrobaa","perfil":"jogador","salt":"8498f45f7614fb421e72a181be88790d","hash":"aeabe4cb788adb18815077d3bfc827f059eb4142965e30339c27cec7525abf93"},
-    {"usuario":"coyote","nome":"CoyoTe","perfil":"jogador","salt":"6fb53dcf4787d439a3cec86b73d24d83","hash":"c1c949759b9de317205cb7295d7ba084d655ef60f7310643fe4bc6f3231cfbca"},
     {"usuario":"creed","nome":"Creed","perfil":"jogador","salt":"7b51d13bba134c53494354d54fdbe8e9","hash":"38f3540056830e3d96374caab05381a5f8bbd438afc8ef07b324473797baf9f1"},
     {"usuario":"crowkiller","nome":"CrowKiller","perfil":"jogador","salt":"1f9e42ebafe0271c21885d10311c0104","hash":"9732a576cdc0037b5ba594792203bb68fe2ce58fdbf62b9de05596dcb30f73f0"},
     {"usuario":"dosinfernos","nome":"Dosinfernos","perfil":"jogador","salt":"b3ca2258cc7bfd605f2147a6e34642b1","hash":"ef59dd8ee56cf890183a853e4b017aa9cc3e1c3af69c22bb38a81d1b5927a764"},
@@ -19,8 +18,9 @@
     {"usuario":"lestatdi","nome":"LestatDi","perfil":"jogador","salt":"eb515894078c527886983442d1e08835","hash":"59808a51ee391a0abd2617493b304ad96d2b5f393eadcdb8dc6fd8c21278236a"},
     {"usuario":"megaduck","nome":"MeGaDuCk","perfil":"jogador","salt":"80335b8e523124d9ff519a1b5c65f228","hash":"a0d78c09eb770cdd6c3e8ac74bbb002d8e387f64b238b2615dfa059d1e2b92d7"},
     {"usuario":"moby","nome":"Moby","perfil":"jogador","salt":"e511491cc9a3ab5844cdf56182c0b95a","hash":"be4f7ce7e5f8daae3c77778bb9aee69c4587bde3a2d95d9a60fdfdb6f22a9e1a"},
+    {"usuario":"nefra","nome":"Nefra","perfil":"jogador","salt":"8498f45f7614fb421e72a181be88790d","hash":"aeabe4cb788adb18815077d3bfc827f059eb4142965e30339c27cec7525abf93"},
     {"usuario":"newhero","nome":"NewHero","perfil":"jogador","salt":"dda098bb183936e4cbf7ad6d94cd1a2a","hash":"0f5229d08050c50b886d7506597721fb2c00c03d3e858b9df3e155b1fbbb2f60"},
-    {"usuario":"pricepk","nome":"PricePk","perfil":"jogador","salt":"715a7c9d6d36f397a8cbf18f66117177","hash":"dce89b186b472e4eceb255a98276631da78e4549fd287d4512949751527a7c4e"},
+    {"usuario":"pricers","nome":"PriceRs","perfil":"jogador","salt":"715a7c9d6d36f397a8cbf18f66117177","hash":"dce89b186b472e4eceb255a98276631da78e4549fd287d4512949751527a7c4e"},
     {"usuario":"rod","nome":"Rod","perfil":"jogador","salt":"a4613234c12e3552a538061cc19c51e5","hash":"2635cb9d23d3ead797fc303b34c2a8c4afc6d405c177329f042dd07c804e6a40"},
     {"usuario":"toninho","nome":"Toninho","perfil":"jogador","salt":"482a834c18755eb6d02d0fd920f1152d","hash":"82bd4f0ac5bc96f506e56f73e9e3984d95b4bd4b3480d194c89497e55d6d8ceb"},
     {"usuario":"torr","nome":"Torr","perfil":"jogador","salt":"7ab9517c0cca0fa501d48f972e9739e8","hash":"09ef05fa30914fe0e39adbc15a1e51fa7566b1c2c5326760bda23992cb6b39ad"},
